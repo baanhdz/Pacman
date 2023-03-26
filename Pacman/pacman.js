@@ -6,6 +6,7 @@ class Pacman{
         this.height = height;
         this.speed = speed;
         this.direction = DIRECTION_RIGHT;
+        this.nextDirection = this.direction;
         this.currentFrame = 1;
         this.frameCount = 7;
 
@@ -19,12 +20,23 @@ class Pacman{
         this.changeDirectionIfPossible();
         this.moveForwards();
         if(this.checkCollision()){
-            this.moveBackwards;
+            this.moveBackwards();
         }
     }
 
     eat(){
-        
+        for (let i = 0; i < map.length; i++) {
+            for (let j = 0; j < map[0].length; j++) {
+                if (
+                    map[i][j] == 2 &&
+                    this.getMapX() == j &&
+                    this.getMapY() == i
+                ) {
+                    map[i][j] = 3;
+                    score++;
+                }
+            }
+        }
     }
 
     //di chuyển về phía sau
@@ -34,14 +46,14 @@ class Pacman{
                 this.x -= this.speed;
                 break;
             case DIRECTION_UP:
-                this.x += this.speed;
+                this.y += this.speed;
                 break;
             case DIRECTION_LEFT:
                 this.x += this.speed;
                 break;
             case DIRECTION_BOTTOM:
-                this.x -= this.speed;
-            break;
+                this.y -= this.speed;
+                break;
         }
     }
 
@@ -52,14 +64,14 @@ class Pacman{
                 this.x += this.speed;
                 break;
             case DIRECTION_UP:
-                this.x -= this.speed;
+                this.y -= this.speed;
                 break;
             case DIRECTION_LEFT:
                 this.x -= this.speed;
                 break;
             case DIRECTION_BOTTOM:
-                this.x += this.speed;
-            break;
+                this.y += this.speed;
+                break;
         }
     }
 
@@ -84,7 +96,17 @@ class Pacman{
 
     //thay đổi hướng 
     changeDirectionIfPossible(){
+        if(this.direction == this.nextDirection) return
 
+        let tempDirection = this.direction
+        this.direction = this.nextDirection;
+        this.moveForwards();
+        if(this.checkCollision()){
+            this.moveBackwards();
+            this.direction = tempDirection;
+        } else {
+            this.moveBackwards();
+        }
     }
 
     //thay đổi Animation
@@ -118,8 +140,7 @@ class Pacman{
             this.y,
             this.width,
             this.height
-
-        )
+        );
 
         canvasContext.restore();
     }
@@ -131,10 +152,10 @@ class Pacman{
         return parseInt(this.y / oneBlockSize);
     }
     getMapXRightSide(){
-        return parseInt((this.x + 0.9999 * oneBlockSize) / oneBlockSize);
+        return parseInt((this.x + 0.9999 * oneBlockSize ) / oneBlockSize);
     }
     getMapYRightSide(){
-        return parseInt((this.y + 0.9999 * oneBlockSize) / oneBlockSize);
+        return parseInt((this.y + 0.9999 * oneBlockSize ) / oneBlockSize);
     }
 
 
