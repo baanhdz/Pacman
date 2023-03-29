@@ -17,7 +17,7 @@ class Ghost{
 
         setInterval(()=>{
             this.changeRandomDirection()
-        },1000);
+        },10000);
 
     }
 
@@ -89,12 +89,7 @@ class Ghost{
         }
         return false;
     }
-
-    //kiểm tra va chạm Ghost
-    checkGhostCollision(){
-
-    }
-
+         
     isInRange() {
         let xDistance = Math.abs(pacman.getMapX() - this.getMapX());
         let yDistance = Math.abs(pacman.getMapY() - this.getMapY());
@@ -201,7 +196,7 @@ class Ghost{
             tempMoves.push(DIRECTION_BOTTOM);
             queue.push({ x: poped.x, y: poped.y + 1, moves: tempMoves });
         }
-        return DIRECTION_UP;
+        return queue;
     }
 
     //thay đổi Animation
